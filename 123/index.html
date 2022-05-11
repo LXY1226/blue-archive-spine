@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta name="viewport" content="width=1600,initial-scale=1.0,minimum=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Blue Archive Resource Viewer</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <meta name="og:title" content="Blue Archive Spine Viewer" />
+    <meta property="og:url" content="https://respectz.github.io/blue-archive-spine/" />
+    <meta name="keywords" content="bluearchive" />
+    <meta name="description" content="Blue Archive Spine Viewer" />
+
+    <!-- PIXI -->
+    <script src="js/pixi.js"></script>
+    <script src="js/pixi-spine.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            margin: 0 auto;
+            background-color: black;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        canvas {
+            min-width: 100%;
+            height: auto;
+            box-sizing: border-box;
+        }
+    </style>
+
+</head>
+
+<body>
+    <canvas id="screen"></canvas>
+    <script>
+        let charConfig = {
+            name: "assets/Iori_home.skel",
+            width: 1920,
+            height: 1080,
+            x: 961,
+            y: 1246,
+            scale: 0.65
+        }
+
+        let $ = v => document.getElementById(v)
+        let canvas = $("screen")
+        canvas.width = charConfig.width;
+        canvas.height = charConfig.height;
+
+        let app = new PIXI.Application({ width: canvas.width, height: canvas.height, view: canvas });
+        let char;
+        let isCharacterLoaded = false;
+
+        // load new spine
+        app.loader
+            .add('char', charConfig.name)
+            .load(onAssetsLoaded)
+
+        function onAssetsLoaded(loader, res) {
+            char = new PIXI.spine.Spine(res.char.spineData);
+            // Centerize
+            char.x = charConfig.x;
+            char.y = charConfig.y;
+            char.scale.x = char.scale.y = charConfig.scale;
+            // Scaler
+            char.state.setAnimation(0, "Idle_01", true);
+            //Add to main canvas
+            app.stage.addChild(char);
+            isCharacterLoaded = true;
+
+            console.log(char)
+            console.log(char.spineData.height)
+            console.log(char.spineData.width)
+
+
+
+            //Set option value
+            // option.scale.value = 0.5;
+            // option.x.value = char.x;
+            // option.y.value = char.y;
+        }
+    </script>
+</body>
+
+</html>

@@ -20,11 +20,15 @@ function loadChar(model = "./assets/spine/shiroko_home/Shiroko_home.skel") {
         }
         audioList = [];
     }
-
-    // load new spine
-    app.loader
-        .add('char', `./${model}`)
-        .load(onAssetsLoaded);
+    try {
+        app.loader.resources = {};
+        // load new spine
+        app.loader
+            .add('char', `./${model}`)
+            .load(onAssetsLoaded);
+    } catch (e) {
+        console.error(e)
+    }
 }
 
 
